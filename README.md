@@ -1,6 +1,6 @@
 # Ionic Capacitor Dark Mode
 
-Platforms Supported: Android, iOS, Electron and Web/PWA
+Platforms Supported: Android, Electron and Web/PWA. iOS support will be added soon....
 
 This plugin can be used to monitor the changes made to system's dark mode. 
 
