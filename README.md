@@ -16,9 +16,25 @@ If you encounter errors, please add both the lines manually to MainActivity.java
 
 # Import the Plugin in your app <br/>
   Open app.component.ts file and import the plugin as follows: <br/>
-  import { Plugins, registerWebPlugin } from '@capacitor/core'; <br/>
-  import { DarkModePlugin  } from 'dark-mode'; <br/>
+ <i> import { Plugins, registerWebPlugin } from '@capacitor/core'; </i> <br/>
+ <i> import { DarkModePlugin  } from 'dark-mode'; </i> <br/>
   
 # Register the Plugin (required only for Web/PWA/Electron <br/>
   Add the following code inside AppComponent's constructor: <br/>
-  registerWebPlugin(DarkModePlugin) <br/>
+ <i> registerWebPlugin(DarkModePlugin) </i> <br/>
+
+# Listen for changes to Dark Mode:
+  <i>  Plugins.DarkModePlugin.addListener("darkModeStateChanged", (state: any) => { <br/>
+         if(state.isDarkModeOn) <br/>
+         { <br/>
+                // Dark mode is on. Apply dark theme to your app <br/>
+         } <br/>
+         else <br/>
+         { <br/>
+              // Dark mode is off. Apply light theme to your app <br/>
+         }   <i> <br/>
+         if(state.supported == false)
+         {
+            // Dark mode is not supported by the platform <br/>          
+         }      
+      });
