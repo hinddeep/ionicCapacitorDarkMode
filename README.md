@@ -9,9 +9,9 @@ This plugin can be used to monitor the changes made to system's dark mode.
 
 # Android Configuration: <br/>
   Open MainActivity.java and add the following code inside this.init() <br/>
-  <i> add(DarkModePlugin.class); </i> <br/>
+  <i> add(DarkMode.class); </i> <br/>
 Adding the above mentioned line will add the following import statement: <br/>
-  <i> import com.bkon.capacitor.DarkMode.DarkModePlugin; </i> <br/>
+  <i> import com.bkon.capacitor.DarkMode.DarkMode; </i> <br/>
 If you encounter errors, please add both the lines manually to MainActivity.java <br/>
 
 # Import the Plugin in your app <br/>
