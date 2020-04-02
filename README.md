@@ -32,9 +32,9 @@ If you encounter errors, please add both the lines manually to MainActivity.java
          else <br/>
          { <br/>
               // Dark mode is off. Apply light theme to your app <br/>
-         }   <i> <br/>
-         if(state.supported == false)
-         {
+         } <br/>
+         if(state.supported == false) <br/>
+         { <br/>
             // Dark mode is not supported by the platform <br/>          
-         }      
+         } <br/>     
       });
