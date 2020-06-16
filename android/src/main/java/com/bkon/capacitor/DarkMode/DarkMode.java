@@ -37,6 +37,7 @@ public class DarkMode extends Plugin {
                 isDarkModeOn = true;
                 data = new JSObject();
                 data.put("isDarkModeOn", isDarkModeOn);
+                getBridge().getActivity().getWindow().setNavigationBarColor(getBridge().getActivity().getResources().getColor(R.color.black));
                 notifyListeners(this.EVENT_DARK_MODE_CHANGE, data, true);
                 break;
 
