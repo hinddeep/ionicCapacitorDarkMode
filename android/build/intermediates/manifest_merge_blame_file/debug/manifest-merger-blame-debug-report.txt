@@ -6,8 +6,8 @@
 6
 7    <uses-sdk
 8        android:minSdkVersion="21"
-8-->D:\Carpooling_28\carpool\node_modules\capacitor-dark-mode\android\src\main\AndroidManifest.xml
-9        android:targetSdkVersion="28" />
-9-->D:\Carpooling_28\carpool\node_modules\capacitor-dark-mode\android\src\main\AndroidManifest.xml
+8-->/Users/hinddeep/Desktop/myapp2/node_modules/capacitor-dark-mode/android/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="29" />
+9-->/Users/hinddeep/Desktop/myapp2/node_modules/capacitor-dark-mode/android/src/main/AndroidManifest.xml
 10
 11</manifest>

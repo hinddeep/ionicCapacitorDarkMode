@@ -1,5 +1,6 @@
 R_DEF: Internal format may change without notice
 local
+color black
 id webview
 layout bridge_layout_main
 string my_string
