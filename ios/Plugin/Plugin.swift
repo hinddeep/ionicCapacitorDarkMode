@@ -8,10 +8,17 @@ import Capacitor
 @objc(DarkMode)
 public class DarkMode: CAPPlugin {
     
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.success([
-            "value": value
-        ])
+    @available(iOS 12.0, *)
+    @objc func isDarkModeOn(_ call: CAPPluginCall) {
+        var isDarkModeOn = false
+        DispatchQueue.main.async {
+            if self.bridge.bridgeDelegate.bridgedViewController?.traitCollection.userInterfaceStyle.rawValue == 2
+            {
+                isDarkModeOn = true
+            }
+            call.success([
+                "isDarkModeOn": isDarkModeOn
+            ])
+        }
     }
 }
