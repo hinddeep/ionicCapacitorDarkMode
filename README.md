@@ -55,26 +55,36 @@ In the native ios project you will find two modules namely, 'App' and 'Pods' <br
    } <br/>
    } <br/>
 
-# Import the Plugin in your app <br/>
-
-Open app.component.ts file and import the plugin as follows: <br/>
+# Web Configuration <br/>
 <i> import { Plugins } from '@capacitor/core'; </i> <br/>
-<i> const { DarkMode } = Plugins; </i> <br/>
+<i> const { DarkMode } = Plugins </i> <br/>
+<i> import 'capacitor-dark-mode' </i> <br/>
+
+<b> SPECIAL NOTE: </b> Remove the import " import 'capacitor-dark-mode' " when building the app for Android. THe native plugin will not be invoked if you forget to remove the import statement before building for Android Platform. 
+
+If you wish to listen to system wide dark mode chamges on the web/PWA, add the following line to enable the listener: <br/>
+ if(!(platform.is("android") || platform.is("ios"))) <br/>
+    { <br/>
+      DarkMode.registerDarkModeChangeListener() <br/>
+    } <br/>
 
 # Listen for changes to Dark Mode:
-
+The event listener might run outside the zone of angular so we might have to trigger change detection ourselves. That is why changedetectorref.detectChanges() has been used. <br/>
 <i> DarkMode.addListener("darkModeStateChanged", (state: any) => { <br/>
 if(state.isDarkModeOn) <br/>
 { <br/>
 // Dark mode is on. Apply dark theme to your app <br/>
+changedetectorref.detectChanges() <br/>
 } <br/>
 else <br/>
 { <br/>
 // Dark mode is off. Apply light theme to your app <br/>
+changedetectorref.detectChanges() <br/>
 } <br/>
 if(state.supported == false) <br/>
 { <br/>
 // Dark mode is not supported by the platform <br/>  
+changedetectorref.detectChanges() <br/>
  } <br/>  
  }); <br/>
 
