@@ -1,24 +1,29 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import { WebPlugin } from '@capacitor/core';
 export class DarkModeWeb extends WebPlugin {
     constructor() {
         super({
             name: 'DarkMode',
-            platforms: ['web'],
+            platforms: ['web', 'android', 'ios'],
         });
+        this.darkMode = { "isDarkModeOn": false };
     }
-    echo(options) {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log('ECHO', options);
-            return options;
+    isDarkModeOn() {
+        var darkMode = { "isDarkModeOn": false };
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            darkMode.isDarkModeOn = true;
+        }
+        return Promise.resolve(darkMode);
+    }
+    registerDarkModeChangeListener() {
+        var darkMode = { "isDarkModeOn": false };
+        window.matchMedia("(prefers-color-scheme: dark)").addListener((status) => {
+            if (status.matches) {
+                darkMode = { "isDarkModeOn": true };
+            }
+            else {
+                darkMode = { "isDarkModeOn": false };
+            }
+            this.notifyListeners("darkModeStateChanged", darkMode);
         });
     }
 }

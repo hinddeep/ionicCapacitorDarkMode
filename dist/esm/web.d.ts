@@ -1,12 +1,12 @@
 import { WebPlugin } from '@capacitor/core';
 import { DarkModePlugin } from './definitions';
 export declare class DarkModeWeb extends WebPlugin implements DarkModePlugin {
+    darkMode: {
+        isDarkModeOn: boolean;
+    };
     constructor();
-    echo(options: {
-        value: string;
-    }): Promise<{
-        value: string;
-    }>;
+    isDarkModeOn(): Promise<any>;
+    registerDarkModeChangeListener(): void;
 }
 declare const DarkMode: DarkModeWeb;
 export { DarkMode };
