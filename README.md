@@ -1,94 +1,149 @@
-# Ionic Capacitor Dark Mode
+# Ionic Capacitor Screen Orientation
 
-For detailed tutorial on how to enable dark mode using this plugin visit:
-https://medium.com/@hinddeep.purohit007/supporting-dark-mode-in-ionic-capacitor-8e57fe9dbd47
+For detailed tutorial on how to use this plugin visit:
+https://medium.com/@hinddeep.purohit007/handling-screen-orientation-changes-in-capacitor-apps-19fe339578a6
 
-Platforms Supported: Android, iOS, Electron and Web/PWA
+Demo Application: https://github.com/hinddeep/Demo-Ionic-Screen_Orientation
 
-This plugin can be used to monitor the changes made to system's dark mode.
+Platforms Supported: Android, iOS
+
+The Capacitor plugin I’ve developed can be used to detect the current of orientation of the screen, lock the screen in a particular orientation (disable auto-rotate) or unlock screen rotation (enable auto-rotate) and to listen for orientation changes.
 
 # Installation <br/>
 
-<i> npm install capacitor-dark-mode </i>
+<i> npm install capacitor-screen-orientation </i>
 
 # Android Configuration: <br/>
 
-1. Open AndroidManifest.xml and find the activity tag. <br/>
-2. Inspect android:configChanges="..." <br/>
-3. If you find uiMode, please remove it. If it isn't present you can move on safely without doing anything.
-
 Open MainActivity.java and add the following code inside this.init() <br/>
-<i> add(DarkMode.class); </i> <br/>
+<i> add(ScreenOrientation.class); </i> <br/>
 Adding the above mentioned line will add the following import statement: <br/>
-<i> import com.bkon.capacitor.DarkMode.DarkMode; </i> <br/>
-If you encounter errors, please add both the lines manually to MainActivity.java <br/>
+<i> import com.bkon.capacitor.screenorientation.ScreenOrientation; </i> <br/>
+If you encounter errors, please add both the lines manually to MainActivity.java <br/><br/>
+
+If you want to listen for the orientation change event on Android: <br/>
+
+1. Open “AndroidManifest.xml” for your app <br/>
+2. Find the Activity tag <br/>
+3. Go to android:configChanges=”...” <br/>
+4. Remove ‘orientation |’ from configChanges <br/> <br/>
+
+Supported Orientations: <br/>
+
+1. LANDSCAPE: left of right is decided by the device’s sensor <br/>
+2. LANDSCAPE_PRIMARY: explicitly specified by developer <br/>
+3. LANDSCAPE_SECONDARY: explicitly specified by developer <br/>
+4. PORTRAIT: up or upside down is decided by the device’s sensor <br/>
+5. PORTRAIT_PRIMARY: explicitly specified by the user <br/>
+6. PORTRAIT_SECONDARY: explicitly specified by the user <br/>
+7. CURRENT: current orientation of the device <br/>
+
+<b>SPECIAL NOTE: Ionic has implicitly disabled PORTRAIT_SECONDARY. </b><br/>
 
 # iOS Configuration: <br/>
 
-In the native ios project you will find two modules namely, 'App' and 'Pods' <br/>
+If you want to lock the screen to the specified orientation on iOS: <br/>
 
-1. Select Pods <br/>
-2. Expand 'Development Pods' <br/>
-3. Expand 'Capacitor' and open 'CAPBridgeViewController.swift' <br/>
-4. Scroll to the very end of the file and paste the following method <br/>
-   public override func traitCollectionDidChange(\_ previousTraitCollection: UITraitCollection?) { <br/>
-   if #available(iOS 13.0, \*) { <br/>
-   if self.traitCollection.userInterfaceStyle.rawValue != previousTraitCollection?.userInterfaceStyle.rawValue <br/>
-   { <br/>
-   var darkmode = ["isDarkModeOn":false] <br/>
-   if self.traitCollection.userInterfaceStyle.rawValue == 2 <br/>
-   { <br/>
-   darkmode = ["isDarkModeOn":true] <br/>
-   } <br/>
-   else <br/>
-   { <br/>
-   darkmode = ["isDarkModeOn":false] <br/>
-   } <br/>
-   NotificationCenter.default.post(name: NSNotification.Name(rawValue: "CAPDarkModeDidChange"), object: self, userInfo: darkmode ) <br/>
-   } <br/>
-   else <br/>
-   { <br/>
-   // No Change <br/>
-   } <br/>
-   } else { <br/>
-   // Fallback on earlier versions <br/>
-   } <br/>
-   } <br/>
+1. Open AppDelegate.swift for your app <br/>
+2. Add the following code: <br/>
 
-# Web Configuration <br/>
-<i> import { Plugins } from '@capacitor/core'; </i> <br/>
-<i> const { DarkMode } = Plugins </i> <br/>
-<i> import 'capacitor-dark-mode' </i> <br/>
+var orientationLock = UIInterfaceOrientationMask.all <br/><br/>
 
-<b> SPECIAL NOTE: </b> Remove the import " import 'capacitor-dark-mode' " when building the app for Android. THe native plugin will not be invoked if you forget to remove the import statement before building for Android Platform. 
+func application(\_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask { <br/>
+return self.orientationLock <br/>
+} <br/>
 
-If you wish to listen to system wide dark mode chamges on the web/PWA, add the following line to enable the listener: <br/>
- if(!(platform.is("android") || platform.is("ios"))) <br/>
+@objc func setOrientationLock(_ notification: Notification) <br/>
     { <br/>
-      DarkMode.registerDarkModeChangeListener() <br/>
+        if let data = notification.userInfo as? [String: Int] <br/>
+        { <br/>
+            for  (_, mask) in data <br/>
+            { <br/>
+                switch mask <br/>
+                { <br/>
+                    case 1: self.orientationLock = UIInterfaceOrientationMask.portrait <br/>
+                        break; <br/>
+                    case 2: self.orientationLock = UIInterfaceOrientationMask.portraitUpsideDown <br/>
+                        break; <br/>
+                    case 3: self.orientationLock = UIInterfaceOrientationMask.landscapeRight <br/>
+                        break; <br/>
+                    case 4: self.orientationLock = UIInterfaceOrientationMask.landscapeLeft <br/>
+                        break; <br/>
+                    case 5: self.orientationLock = UIInterfaceOrientationMask.landscape <br/>
+                        break; <br/>
+                default: self.orientationLock = UIInterfaceOrientationMask.all <br/>
+                } <br/>
+            } <br/>
+        } <br/>
     } <br/>
 
-# Listen for changes to Dark Mode:
-The event listener might run outside the zone of angular so we might have to trigger change detection ourselves. That is why changedetectorref.detectChanges() has been used. <br/>
-<i> DarkMode.addListener("darkModeStateChanged", (state: any) => { <br/>
-if(state.isDarkModeOn) <br/>
-{ <br/>
-// Dark mode is on. Apply dark theme to your app <br/>
-changedetectorref.detectChanges() <br/>
-} <br/>
-else <br/>
-{ <br/>
-// Dark mode is off. Apply light theme to your app <br/>
-changedetectorref.detectChanges() <br/>
-} <br/>
-if(state.supported == false) <br/>
-{ <br/>
-// Dark mode is not supported by the platform <br/>  
-changedetectorref.detectChanges() <br/>
- } <br/>  
- }); <br/>
+3. Locate: "func application(\_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {" <br/>
+4. Add the following code inside the function: <br/>
+   NotificationCenter.default.addObserver(self, selector: #selector(self.setOrientationLock), name: NSNotification.Name(rawValue: "CAPOrientationLocked"), object: nil) <br/>
 
-# Check if dark mode is enabled or not:
 
-let darkmode = await DarkMode.isDarkModeOn(); <br/>
-console.log(darkmode.isDarkModeOn); <br/>
+Supported Orientations: <br/>
+
+1. all: all orientations <br/>
+2. allButUpsideDown: all orientations other than upside down <br/>
+3. landscape: left of right is decided by the device’s sensor <br/>
+4. landscapeLeft: explicitly specified by the user <br/>
+5. landscapeRight: explicitly specified by the user <br/>
+6. portrait: up or upside down is decided by the device’s sensor <br/>
+7. portraitUpsideDown: explicitly specified by the user <br/>
+
+<b> SPECIAL NOTE: Ionic has implicitly disabled portraitUpsideDown. </b> <br/>
+
+# Import the Plugin in your Web app <br/>
+
+Open app.component.ts file and import the plugin as follows: <br/>
+<i> import { Plugins } from "@capacitor/core";</i> <br/>
+<i> const { ScreenOrientation } = Plugins;</i> <br/>
+<i> import 'capacitor-screen-orientation' </i> <br/>
+
+<b> SPECIAL NOTE: Remove import 'capacitor-screen-orientation' when compiling app for Android. </b> <br/>
+
+# Handle screen orientation:
+
+1. Create a function to get the current screen orientation: <br/>
+   async getOrientation() { <br/>
+   let obj = await ScreenOrientation.getScreenOrientation(); <br/>
+   this.screen_orientation = obj.orientation; <br/>
+   } <br/>
+
+2. Create a function to lock the screen in a particular orientation:
+   async lockOrientation() { <br/>
+   await ScreenOrientation.lockScreenOrientation({ <br/>
+   orientation: this.screen_orientation_lock, <br/>
+   }); <br/>
+   } <br/>
+
+Supported values for screen_orientation_lock variable: <br/>
+
+1. LANDSCAPE_PRIMARY (Android and iOS) <br/>
+2. PORTRAIT_PRIMARY (Android and iOS) <br/>
+3. LANDSCAPE_SECONDARY (Android and iOS) <br/>
+4. PORTRAIT_SECONDARY (Android and iOS) <br/>
+5. LANDSCAPE (Android only) <br/>
+6. PORTRAIT (Android only) <br/>
+7. CURRENT (Android only) <br/>
+
+3) Create a function to unlock screen rotation: <br/>
+   async UnlockOrientation() { <br/>
+   await ScreenOrientation.unlockScreenOrientation({}); <br/>
+   } <br/>
+
+4) Create a function that handles subscription to the orientation change event: <br/>
+   subscribeToOrientationChanges() { <br/>
+   ScreenOrientation.addListener("orientation_changed", (data) => { <br/>
+   this.screen_orientation_event = data.orientation; <br/>
+   }); <br/>
+   } <br/>
+
+# Rotate to a specific orientation (without locking the orientation): 
+NOTE: NOT supported on Android <br/>
+async rotate() { <br/>
+    await ScreenOrientation.rotateTo({ <br/>
+      orientation: this.rotateTo, <br/>
+    }); <br/>
+  } <br/>
