@@ -1,87 +1,45 @@
 import { WebPlugin } from '@capacitor/core';
-import { ScreenOrientationPlugin } from './definitions';
+import { DarkModePlugin } from './definitions';
 
-export class ScreenOrientationWeb extends WebPlugin implements ScreenOrientationPlugin {
-  orientation = window.screen.orientation;
+export class DarkModeWeb extends WebPlugin implements DarkModePlugin {
+  darkMode = {"isDarkModeOn":false}
 
   constructor() {
     super({
-      name: 'ScreenOrientation',
+      name: 'DarkMode',
       platforms: ['web','android','ios'],
     });
   }
 
-  getScreenOrientation(): Promise<any>
-  {
-    var my_orientation = {"orientation":"PORTRAIT_PRIMARY"}
-    let orient = (screen.orientation  || {}).type 
-
-    switch (orient) {
-      case "landscape-primary":
-        my_orientation.orientation = "landscape-primary"
-        break;
-      case "landscape-secondary":
-        my_orientation.orientation = "landscape-secondary"
-        break;
-      case "portrait-secondary":
-        my_orientation.orientation = "portrait-secondary"
-        break;
-      case "portrait-primary":
-        my_orientation.orientation = "portrait-primary"
-        break;
-    
-      default:
-        break;
+  isDarkModeOn(): Promise<any> {
+    var darkMode = {"isDarkModeOn":false}
+    if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    {
+      darkMode.isDarkModeOn = true
     }
-    return Promise.resolve(orientation)
+    return  Promise.resolve(darkMode);
   }
 
-  lockScreenOrientation(options: { orientation: string }): void
+  registerDarkModeChangeListener():void
   {
-    console.log(options)
-    switch (options.orientation) {
-      case "LANDSCAPE_PRIMARY":
-        this.orientation.lock("landscape-primary")
-        break;
-      case "PORTRAIT_PRIMARY":
-        this.orientation.lock("portrait-primary")
-        break;
-      case "LANDSCAPE_SECONDARY":
-        this.orientation.lock("landscape-secondary")
-        break;
-      case "LANDSCAPE_PRIMARY":
-        this.orientation.lock("landscape-primary")
-        break;
-    
-      default:
-        break;
-    }
-
-  }
-
-  unlockScreenOrientation(): void
-  {
-    this.orientation.unlock()
-  }
-
-  rotateTo(): void
-  {
-    console.log("Not Supported on web...")
-  }
-
-  registerOrientationChangeListener():void
-  {
-    screen.orientation.addEventListener('change', () => {
-        this.getScreenOrientation().then((my_orientation) => {
-          this.notifyListeners("orientation_changed",my_orientation)
-        })
-      });
+    var darkMode = {"isDarkModeOn":false}
+      window.matchMedia("(prefers-color-scheme: dark)").addListener((status) => {
+        if(status.matches)
+        {
+          darkMode = {"isDarkModeOn":true}
+        }
+        else
+        {
+          darkMode = {"isDarkModeOn":false}
+        }
+        this.notifyListeners("darkModeStateChanged",darkMode)
+    });
   }
 }
 
-const ScreenOrientation = new ScreenOrientationWeb();
+const DarkMode = new DarkModeWeb();
 
-export { ScreenOrientation };
+export { DarkMode };
 
 import { registerWebPlugin } from '@capacitor/core';
-registerWebPlugin(ScreenOrientation);
+registerWebPlugin(DarkMode);

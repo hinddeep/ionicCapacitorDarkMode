@@ -2,18 +2,15 @@ import { PluginListenerHandle } from "@capacitor/core";
 
 declare module '@capacitor/core' {
   interface PluginRegistry {
-    ScreenOrientation: ScreenOrientationPlugin;
+    DarkMode: DarkModePlugin;
   }
 }
 
-export interface ScreenOrientationPlugin {
-  getScreenOrientation(): Promise<any>;
-  lockScreenOrientation(options: { orientation: string }): void;
-  unlockScreenOrientation(): void;
-  rotateTo(options: { orientation: string }): void;
+export interface DarkModePlugin {
+  isDarkModeOn(): Promise<any>;
   addListener(
-    eventName: 'orientation_changed',
+    eventName: 'darkModeStateChanged',
     listenerFunc: (state: any) => void,
   ): PluginListenerHandle;
-  registerOrientationChangeListener():void;
+  registerDarkModeChangeListener():void;
 }

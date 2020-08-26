@@ -1,15 +1,12 @@
 import { WebPlugin } from '@capacitor/core';
-import { ScreenOrientationPlugin } from './definitions';
-export declare class ScreenOrientationWeb extends WebPlugin implements ScreenOrientationPlugin {
-    orientation: ScreenOrientation;
+import { DarkModePlugin } from './definitions';
+export declare class DarkModeWeb extends WebPlugin implements DarkModePlugin {
+    darkMode: {
+        isDarkModeOn: boolean;
+    };
     constructor();
-    getScreenOrientation(): Promise<any>;
-    lockScreenOrientation(options: {
-        orientation: string;
-    }): void;
-    unlockScreenOrientation(): void;
-    rotateTo(): void;
-    registerOrientationChangeListener(): void;
+    isDarkModeOn(): Promise<any>;
+    registerDarkModeChangeListener(): void;
 }
-declare const ScreenOrientation: ScreenOrientationWeb;
-export { ScreenOrientation };
+declare const DarkMode: DarkModeWeb;
+export { DarkMode };
