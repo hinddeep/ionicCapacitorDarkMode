@@ -60,7 +60,7 @@ In the native ios project you will find two modules namely, 'App' and 'Pods' <br
 <i> const { DarkMode } = Plugins </i> <br/>
 <i> import 'capacitor-dark-mode' </i> <br/>
 
-<b> SPECIAL NOTE: </b> Remove the import " import 'capacitor-dark-mode' " when building the app for Android. THe native plugin will not be invoked if you forget to remove the import statement before building for Android Platform. 
+<b> SPECIAL NOTE: </b> Remove the import " import 'capacitor-dark-mode' " when building the app for Android and iOS. THe native plugin will not be invoked if you forget to remove the import statement before building for Android and iOS Platform. 
 
 If you wish to listen to system wide dark mode chamges on the web/PWA, add the following line to enable the listener: <br/>
  if(!(platform.is("android") || platform.is("ios"))) <br/>
