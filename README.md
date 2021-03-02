@@ -31,64 +31,71 @@ In the native ios project you will find two modules namely, 'App' and 'Pods' <br
 2. Expand 'Development Pods' <br/>
 3. Expand 'Capacitor' and open 'CAPBridgeViewController.swift' <br/>
 4. Scroll to the very end of the file and paste the following method <br/>
-   public override func traitCollectionDidChange(\_ previousTraitCollection: UITraitCollection?) { <br/>
-   if #available(iOS 13.0, \*) { <br/>
-   if self.traitCollection.userInterfaceStyle.rawValue != previousTraitCollection?.userInterfaceStyle.rawValue <br/>
-   { <br/>
-   var darkmode = ["isDarkModeOn":false] <br/>
-   if self.traitCollection.userInterfaceStyle.rawValue == 2 <br/>
-   { <br/>
-   darkmode = ["isDarkModeOn":true] <br/>
-   } <br/>
-   else <br/>
-   { <br/>
-   darkmode = ["isDarkModeOn":false] <br/>
-   } <br/>
-   NotificationCenter.default.post(name: NSNotification.Name(rawValue: "CAPDarkModeDidChange"), object: self, userInfo: darkmode ) <br/>
-   } <br/>
-   else <br/>
-   { <br/>
-   // No Change <br/>
-   } <br/>
-   } else { <br/>
-   // Fallback on earlier versions <br/>
-   } <br/>
-   } <br/>
-
+```
+   public override func traitCollectionDidChange(\_ previousTraitCollection: UITraitCollection?) {
+      if #available(iOS 13.0, \*) {
+         if self.traitCollection.userInterfaceStyle.rawValue != previousTraitCollection?.userInterfaceStyle.rawValue
+         {
+            var darkmode = ["isDarkModeOn":false]
+            if self.traitCollection.userInterfaceStyle.rawValue == 2
+            {
+               darkmode = ["isDarkModeOn":true]
+            }
+            else
+            {
+               darkmode = ["isDarkModeOn":false]
+            }
+               NotificationCenter.default.post(name: NSNotification.Name(rawValue: "CAPDarkModeDidChange"), object: self, userInfo: darkmode )
+            }
+            else
+            { 
+               // No Change
+            }
+      } else {
+         // Fallback on earlier versions.
+      }
+   }
+```
 # Web Configuration <br/>
-<i> import { Plugins } from '@capacitor/core'; </i> <br/>
-<i> const { DarkMode } = Plugins </i> <br/>
-<i> import 'capacitor-dark-mode' </i> <br/>
+```
+import { Plugins } from '@capacitor/core';
+const { DarkMode } = Plugins;
+import 'capacitor-dark-mode';
+```
 
 <b> SPECIAL NOTE: </b> Remove the import " import 'capacitor-dark-mode' " when building the app for Android and iOS. THe native plugin will not be invoked if you forget to remove the import statement before building for Android and iOS Platform. 
 
-If you wish to listen to system wide dark mode chamges on the web/PWA, add the following line to enable the listener: <br/>
- if(!(platform.is("android") || platform.is("ios"))) <br/>
-    { <br/>
-      DarkMode.registerDarkModeChangeListener() <br/>
-    } <br/>
-
+If you wish to listen to system wide dark mode chamges on the web/PWA, add the following line to enable the listener:
+```
+ if(!(platform.is("android") || platform.is("ios")))
+ {
+   DarkMode.registerDarkModeChangeListener()
+ }
+```
 # Listen for changes to Dark Mode:
 The event listener might run outside the zone of angular so we might have to trigger change detection ourselves. That is why changedetectorref.detectChanges() has been used. <br/>
-<i> DarkMode.addListener("darkModeStateChanged", (state: any) => { <br/>
-if(state.isDarkModeOn) <br/>
-{ <br/>
-// Dark mode is on. Apply dark theme to your app <br/>
-changedetectorref.detectChanges() <br/>
-} <br/>
-else <br/>
-{ <br/>
-// Dark mode is off. Apply light theme to your app <br/>
-changedetectorref.detectChanges() <br/>
-} <br/>
-if(state.supported == false) <br/>
-{ <br/>
-// Dark mode is not supported by the platform <br/>  
-changedetectorref.detectChanges() <br/>
- } <br/>  
- }); <br/>
+```
+DarkMode.addListener("darkModeStateChanged", (state: any) => 
+   if(state.isDarkModeOn) 
+   { 
+      // Dark mode is on. Apply dark theme to your app
+      changedetectorref.detectChanges()
+   }
+   else
+   {
+      // Dark mode is off. Apply light theme to your app
+      changedetectorref.detectChanges()
+   }
+   if(state.supported == false)
+   {
+      // Dark mode is not supported by the platform 
+      changedetectorref.detectChanges()
+    }
+});
+```
 
 # Check if dark mode is enabled or not:
-
-let darkmode = await DarkMode.isDarkModeOn(); <br/>
-console.log(darkmode.isDarkModeOn); <br/>
+```
+let darkmode = await DarkMode.isDarkModeOn();
+console.log(darkmode.isDarkModeOn);
+```
