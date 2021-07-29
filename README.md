@@ -18,7 +18,7 @@ This plugin can be used to monitor the changes made to system's dark mode.
 3. If you find uiMode, please remove it. If it isn't present you can move on safely without doing anything.
 
 Open MainActivity.java and add the following code inside this.init() <br/>
-<i> add(DarkMode.class); </i> <br/>
+<i> registerPlugin(DarkMode.class); </i> <br/>
 Adding the above mentioned line will add the following import statement: <br/>
 <i> import com.bkon.capacitor.DarkMode.DarkMode; </i> <br/>
 If you encounter errors, please add both the lines manually to MainActivity.java <br/>
