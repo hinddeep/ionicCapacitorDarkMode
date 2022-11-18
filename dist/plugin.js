@@ -35,7 +35,9 @@ var capacitorPlugin = (function (exports, core) {
     exports.DarkMode = DarkMode;
     exports.DarkModeWeb = DarkModeWeb;
 
+    Object.defineProperty(exports, '__esModule', { value: true });
+
     return exports;
 
-}({}, capacitorExports));
+})({}, capacitorExports);
 //# sourceMappingURL=plugin.js.map
