@@ -30,7 +30,7 @@ In the native ios project you will find two modules namely, 'App' and 'Pods' <br
 1. Select Pods <br/>
 2. Expand 'Development Pods' <br/>
 3. Expand 'Capacitor' and open 'CAPBridgeViewController.swift' <br/>
-4. Scroll to the very end of the file and paste the following method <br/>
+4. Scroll to the very end of the class and paste the following method <br/>
 ```
    public override func traitCollectionDidChange(\_ previousTraitCollection: UITraitCollection?) {
       if #available(iOS 13.0, \*) {
@@ -56,6 +56,7 @@ In the native ios project you will find two modules namely, 'App' and 'Pods' <br
       }
    }
 ```
+
 # Web Configuration <br/>
 ```
 import { Plugins } from '@capacitor/core';

@@ -29,7 +29,7 @@ public class DarkMode: CAPPlugin {
     @objc func isDarkModeOn(_ call: CAPPluginCall) {
         var isDarkModeOn = false
         DispatchQueue.main.async {
-            if self.bridge.bridgeDelegate.bridgedViewController?.traitCollection.userInterfaceStyle.rawValue == 2
+            if self.bridge?.viewController?.traitCollection.userInterfaceStyle.rawValue == 2
             {
                 isDarkModeOn = true
             }
