@@ -1,6 +1,6 @@
 {
   "name": "capacitor-dark-mode",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Handle dark mode changes on android and iOS",
   "main": "dist/plugin.js",
   "module": "dist/esm/index.js",
